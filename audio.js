@@ -8,11 +8,11 @@
   const META_STORAGE_KEY = 'cicada_vn_meta_v1';
 
   const BGM_FILES = {
-    title_breeze: 'assets/bgm_title_breeze.mp3',
-    summer_day: 'assets/bgm_summer_day.mp3',
-    twilight_memory: 'assets/bgm_twilight_memory.mp3',
-    tension_secret: 'assets/bgm_tension_secret.mp3',
-    climax_choice: 'assets/bgm_climax_choice.mp3'
+    title_breeze: 'assets/audio/bgm_title_breeze.mp3',
+    summer_day: 'assets/audio/bgm_summer_day.mp3',
+    twilight_memory: 'assets/audio/bgm_twilight_memory.mp3',
+    tension_secret: 'assets/audio/bgm_tension_secret.mp3',
+    climax_choice: 'assets/audio/bgm_climax_choice.mp3'
   };
 
   const NOTE_INDEX = {
@@ -1321,6 +1321,7 @@
       const opts = options || {};
       const ctx = this.ctx;
       const now = ctx.currentTime;
+      const pitchVar = 0.94 + Math.random() * 0.12;
 
       if (sfxId === 'cicada_ambience') {
         this._startCicadaAmbience();
@@ -1333,10 +1334,10 @@
         breath.buffer = this.pinkNoiseBuffer;
         const hp = ctx.createBiquadFilter();
         hp.type = 'highpass';
-        hp.frequency.value = 1800;
+        hp.frequency.value = 1800 * pitchVar;
         const bp = ctx.createBiquadFilter();
         bp.type = 'bandpass';
-        bp.frequency.value = 2800;
+        bp.frequency.value = 2800 * pitchVar;
         const bg = ctx.createGain();
         bg.gain.setValueAtTime(0.0001, now);
         bg.gain.linearRampToValueAtTime(0.03, now + 0.06);
@@ -1346,10 +1347,10 @@
 
         const triggerChimeStrike = (offsetSec, scale) => {
           const partials = [
-            [1760, 0.14 * scale, 1.9],
-            [2637, 0.10 * scale, 1.6],
-            [3595, 0.06 * scale, 1.3],
-            [4890, 0.03 * scale, 0.9]
+            [1760 * pitchVar, 0.14 * scale, 1.9],
+            [2637 * pitchVar, 0.10 * scale, 1.6],
+            [3595 * pitchVar, 0.06 * scale, 1.3],
+            [4890 * pitchVar, 0.03 * scale, 0.9]
           ];
           partials.forEach(([freq, gVal, dec], idx) => {
             const t = now + 0.03 + offsetSec + idx * 0.024;
@@ -1381,9 +1382,9 @@
         wet.gain.value = 0.35;
         wet.connect(this.reverbSend);
 
-        this._playMusicBox(this.masterSfxGain, now, 587.33, 0.55, 0.85);
-        this._playMusicBox(this.masterSfxGain, now + 0.022, 880.0, 0.65, 0.85);
-        this._playMusicBox(wet, now, 587.33, 0.55, 0.5);
+        this._playMusicBox(this.masterSfxGain, now, 587.33 * pitchVar, 0.55, 0.85);
+        this._playMusicBox(this.masterSfxGain, now + 0.022, 880.0 * pitchVar, 0.65, 0.85);
+        this._playMusicBox(wet, now, 587.33 * pitchVar, 0.55, 0.5);
 
         const resonance = opts.resonance || 'none';
         if (resonance === 'outsideBond') {
@@ -1450,8 +1451,8 @@
           osc.start(t);
           osc.stop(t + dur + 0.03);
         };
-        beat(0.0, 88, 42, 0.36, 0.16);
-        beat(0.19, 76, 38, 0.24, 0.14);
+        beat(0.0, 88 * pitchVar, 42 * pitchVar, 0.36, 0.16);
+        beat(0.19, 76 * pitchVar, 38 * pitchVar, 0.24, 0.14);
 
         // Subtle BGM ducking
         if (this.bgmPreGain) {
@@ -1470,9 +1471,9 @@
         const bp = ctx.createBiquadFilter();
         bp.type = 'bandpass';
         bp.Q.value = 2.4;
-        bp.frequency.setValueAtTime(420, now);
-        bp.frequency.linearRampToValueAtTime(880, now + 0.18);
-        bp.frequency.linearRampToValueAtTime(360, now + 0.42);
+        bp.frequency.setValueAtTime(420 * pitchVar, now);
+        bp.frequency.linearRampToValueAtTime(880 * pitchVar, now + 0.18);
+        bp.frequency.linearRampToValueAtTime(360 * pitchVar, now + 0.42);
 
         const g = ctx.createGain();
         g.gain.setValueAtTime(0.0001, now);
@@ -1532,7 +1533,7 @@
         wet.gain.value = 0.65;
         wet.connect(this.reverbSend);
 
-        [1318.51, 1324.0, 1975.53].forEach((freq, idx) => {
+        [1318.51 * pitchVar, 1324.0 * pitchVar, 1975.53 * pitchVar].forEach((freq, idx) => {
           const osc = ctx.createOscillator();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, bellT);
@@ -1617,28 +1618,29 @@
       if (!this.unlocked || !this.ctx) return;
       const ctx = this.ctx;
       const now = ctx.currentTime;
+      const uiPitch = 0.94 + Math.random() * 0.12;
 
       if (uiId === 'advance') {
         const src = ctx.createBufferSource();
         src.buffer = this.pinkNoiseBuffer;
         const hp = ctx.createBiquadFilter();
         hp.type = 'highpass';
-        hp.frequency.value = 2200;
+        hp.frequency.value = 2200 * uiPitch;
         const g = ctx.createGain();
         g.gain.setValueAtTime(0.0001, now);
         g.gain.linearRampToValueAtTime(0.03, now + 0.006);
         g.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
         src.connect(hp); hp.connect(g); g.connect(this.masterSfxGain);
         src.start(now, 0.3, 0.055);
-        this._playMusicBox(this.masterSfxGain, now, 880, 0.05, 0.22);
+        this._playMusicBox(this.masterSfxGain, now, 880 * uiPitch, 0.05, 0.22);
       } else if (uiId === 'hover') {
         const ms = performance.now();
         if (ms - this.lastHoverMs < 65) return;
         this.lastHoverMs = ms;
         const osc = ctx.createOscillator();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(680, now);
-        osc.frequency.linearRampToValueAtTime(740, now + 0.025);
+        osc.frequency.setValueAtTime(680 * uiPitch, now);
+        osc.frequency.linearRampToValueAtTime(740 * uiPitch, now + 0.025);
         const lp = ctx.createBiquadFilter();
         lp.type = 'lowpass';
         lp.frequency.value = 1500;

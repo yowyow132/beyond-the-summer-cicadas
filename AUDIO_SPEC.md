@@ -1,8 +1,10 @@
-# 《夏末蟬鳴的彼岸》（Beyond the Summer Cicadas）— Web Audio 聲音設計與合成規格書（AUDIO_SPEC）
+# 《夏末蟬鳴的彼岸》（Beyond the Summer Cicadas）— 聲音設計與音訊規格書（AUDIO_SPEC v3.0）
 
-> **文件定位**：本規格書定義《夏末蟬鳴的彼岸》之完整聲音美學、純 Web Audio API 程式合成架構、5 首循環背景音樂（BGM）樂理與編曲參數、6 組劇本音效（SFX）＋夏蟬環境音層、打字機與介面微音效，以及跨平台音訊安全與音量控制規範。  
-> **實作原則**：**零外部音檔依賴（100% Web Audio API 即時合成）**，以溫暖、留白、具空氣感的原聲鋼琴／玻璃風鈴／環境音色為核心，徹底避免刺耳的方波（Square）或乾澀電子音感。  
-> **ID 對齊契約**：所有曲目與音效 ID 嚴格對齊 [`GAME_SPEC.md`](GAME_SPEC.md) §2.3 與 [`SCRIPT_SPEC.md`](SCRIPT_SPEC.md) §2.3。
+> **文件定位**：本規格書定義《夏末蟬鳴的彼岸》之完整聲音美學、預渲染立體聲 MP3＋Web Audio 雙層備援架構、5 首循環背景音樂（BGM）曲目規格、6 組劇本音效（SFX）＋夏蟬環境音層、隨機音高微擾防疲勞機制，以及跨平台音訊安全與音量控制規範。  
+> **實作原則（依 v1.4.0 `audio-director.md` 三級優先序）**：  
+> - **Tier 1 實測結果**：已檢核使用者 `GEMINI_API_KEY` 並實測 Gemini Lyria API（`lyria-3-clip-preview` / `lyria-3.5`），回傳 Free Tier 配額限制（`HTTP 429: limit 0 requests per day on Free Tier`），依規範降級至穩定可靠的離線多軌母帶資源。  
+> - **Tier 3 實裝架構**：於 `assets/audio/` 提供 5 首 44.1 kHz 立體聲 160 kbps MP3 預渲染循環母帶（`assets/audio/bgm_*.mp3`，60s–77.8s），並保留 100% Web Audio API 即時多聲部 Lookahead 合成器作為零依賴備援；劇本 SFX 與介面/打字機音效全面導入 **`±6%`～`±8%` 隨機音高微擾（Pitch Jitter）**，杜絕重複觸發的機械感。  
+> **ID 對齊契約**：所有曲目與音效 ID 嚴格對齊 [`GAME_SPEC.md`](GAME_SPEC.md) §2.3 與 [`SCRIPT_SPEC.md`](SCRIPT_SPEC.md) §2.4。
 
 ---
 
@@ -136,7 +138,7 @@
 ---
 
 ### 3.3 `twilight_memory` — 暮色追憶（河岸堤防、夏實重逢、情感流動與苦澀餘韻）
-- **情感意象**：夕陽把河面與舊水閘染成橘紅，十年前的記憶與說不出口的愧疚順著晚風浮現。
+- **情感意象**：夕陽把河堤與水面染成橘紅，十年前舊宅火災的記憶與說不出口的愧疚順著晚風浮現。
 - **速度與拍號**：**68 BPM**｜`3/4` 拍（優雅略帶孤寂感的華爾滋搖曳拍）｜1 小節 `2.647s`｜**8 小節循環（總長 `21.176s`）**
 - **調性與音階**：**E 小調（E Natural Minor / Dorian 轉折）**
 - **和弦進行（每小節 1 個和弦）**：

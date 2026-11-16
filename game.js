@@ -194,7 +194,14 @@
     const urls = [];
     Object.values(VN.ASSETS.backgrounds).forEach((src) => urls.push(src));
     Object.values(VN.ASSETS.characters).forEach((ch) => {
-      Object.values(ch.sprites).forEach((src) => urls.push(src));
+      if (ch.sprites) {
+        Object.values(ch.sprites).forEach((src) => urls.push(src));
+      }
+      if (ch.outfits) {
+        Object.values(ch.outfits).forEach((outfitMap) => {
+          Object.values(outfitMap).forEach((src) => urls.push(src));
+        });
+      }
     });
     urls.forEach((src) => {
       const img = new Image();
@@ -495,7 +502,10 @@
       }
 
       const charInfo = VN.ASSETS.characters[spec.id];
-      const src = charInfo && charInfo.sprites[spec.expr];
+      const src =
+        charInfo &&
+        ((spec.outfit && charInfo.outfits && charInfo.outfits[spec.outfit] && charInfo.outfits[spec.outfit][spec.expr]) ||
+          (charInfo.sprites && charInfo.sprites[spec.expr]));
       if (!src) return;
 
       slot.dataset.charId = spec.id;
