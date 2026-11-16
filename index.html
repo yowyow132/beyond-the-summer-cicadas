@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>夏末蟬鳴的彼岸｜Beyond the Summer Cicadas</title>
+  <link rel="icon" type="image/png" href="assets/cg_epilogue.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-root" class="screen-title">
+    <!-- =================================================================== -->
+    <!-- 1. 標題畫面 (Title Screen)                                          -->
+    <!-- =================================================================== -->
+    <section id="title-screen" class="title-screen is-active" aria-label="標題畫面">
+      <div class="title-backdrop">
+        <img src="assets/bg_oldhouse.png" alt="" class="title-bg-img title-bg-main" />
+        <img src="assets/cg_dawn_horizon.png" alt="" class="title-bg-img title-bg-alt" />
+        <div class="title-scrim"></div>
+      </div>
+
+      <!-- 右側女主角主視覺立繪展示 -->
+      <div class="title-hero-showcase" aria-hidden="true">
+        <img src="assets/char_natsumi_idle.png" alt="" class="title-hero-char title-hero-secondary" />
+        <img src="assets/char_kotori_idle.png" alt="" class="title-hero-char title-hero-primary" />
+      </div>
+
+      <div class="title-content">
+        <header class="title-header">
+          <p class="title-eyebrow">PSYCHOLOGICAL SUMMER VISUAL NOVEL</p>
+          <h1 class="title-logo">夏末蟬鳴的彼岸</h1>
+          <p class="title-subtitle">BEYOND THE SUMMER CICADAS</p>
+          <p class="title-tagline">「蟬鳴停歇之前，你會選擇關上木窗，還是推開那扇門？」</p>
+        </header>
+
+        <nav class="title-menu" aria-label="主選單">
+          <button id="btn-new-game" type="button" class="title-btn title-btn-primary">
+            <span class="btn-diamond">◆</span>
+            <span class="btn-text">從頭開始</span>
+            <span class="btn-sub">NEW GAME</span>
+          </button>
+
+          <button id="btn-continue" type="button" class="title-btn is-hidden">
+            <span class="btn-diamond">◇</span>
+            <span class="btn-text">繼續遊戲</span>
+            <span id="continue-sub" class="btn-sub">CONTINUE</span>
+          </button>
+
+          <div class="title-menu-row">
+            <button id="btn-title-load" type="button" class="title-btn title-btn-compact">
+              <span class="btn-diamond">◇</span>
+              <span class="btn-text">讀取存檔</span>
+            </button>
+            <button id="btn-title-gallery" type="button" class="title-btn title-btn-compact">
+              <span class="btn-diamond">◇</span>
+              <span class="btn-text">鑑賞室</span>
+              <span id="title-gallery-count" class="gallery-pill">0 / 4</span>
+            </button>
+          </div>
+
+          <button id="btn-title-settings" type="button" class="title-btn title-btn-ghost">
+            <span>音效與系統設定</span>
+          </button>
+        </nav>
+
+        <div class="title-guide-wrap">
+          <button id="btn-guide-toggle" type="button" class="guide-toggle-btn" aria-expanded="false">
+            <span>？ 第一次玩視覺小說嗎？展開 3 步新手導引</span>
+            <span class="guide-chevron">▾</span>
+          </button>
+          <div id="guide-card" class="guide-card is-collapsed">
+            <ol class="guide-steps">
+              <li>
+                <strong>點擊推進，誠實面對內心抉擇</strong>
+                <span>單擊對話框完成顯示，再點擊進入下一句；每次選擇都將累積看不見的羈絆與秘密，通往 4 種截然不同的夏末結局。</span>
+              </li>
+              <li>
+                <strong>善用 3 個存檔格與快速存檔</strong>
+                <span>在關鍵分歧前按下上方「存檔」，即可隨時回溯探索另一條路線與十年前真相。</span>
+              </li>
+              <li>
+                <strong>二周目助手：Skip 已讀快進</strong>
+                <span>重玩時開啟「快進」，系統只會高速略過已讀對話，並在<strong>全新分歧或未讀劇情處自動停下</strong>。</span>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- 2. 遊戲舞台 (Visual Novel Stage)                                    -->
+    <!-- =================================================================== -->
+    <main id="vn-stage" class="vn-stage" aria-label="遊戲舞台">
+      <!-- 雙層交叉淡入淡出背景 -->
+      <div id="bg-container" class="bg-container">
+        <img id="bg-layer-a" class="bg-layer is-visible" alt="場景背景" />
+        <img id="bg-layer-b" class="bg-layer" alt="" />
+        <div id="stage-vignette" class="stage-vignette"></div>
+      </div>
+
+      <!-- 三站位雙緩衝角色立繪舞台 -->
+      <div id="char-stage" class="char-stage" aria-hidden="true">
+        <div id="char-slot-left" class="char-slot char-slot-left" data-pos="left">
+          <img class="char-img char-img-a" alt="" />
+          <img class="char-img char-img-b" alt="" />
+        </div>
+        <div id="char-slot-center" class="char-slot char-slot-center" data-pos="center">
+          <img class="char-img char-img-a" alt="" />
+          <img class="char-img char-img-b" alt="" />
+        </div>
+        <div id="char-slot-right" class="char-slot char-slot-right" data-pos="right">
+          <img class="char-img char-img-a" alt="" />
+          <img class="char-img char-img-b" alt="" />
+        </div>
+      </div>
+
+      <!-- 上方系統控制列 -->
+      <header id="control-bar" class="control-bar" aria-label="遊戲控制列">
+        <div id="scene-chapter-pill" class="scene-chapter-pill">序幕・歸返與蟬聲</div>
+        <div class="control-actions">
+          <button id="btn-save" type="button" class="ctrl-btn" title="存檔">
+            <span class="ctrl-icon">Save</span>
+            <span class="ctrl-label">存檔</span>
+          </button>
+          <button id="btn-load" type="button" class="ctrl-btn" title="讀檔">
+            <span class="ctrl-icon">Load</span>
+            <span class="ctrl-label">讀檔</span>
+          </button>
+          <button id="btn-log" type="button" class="ctrl-btn" title="對話紀錄 (L)">
+            <span class="ctrl-icon">Log</span>
+            <span class="ctrl-label">紀錄</span>
+          </button>
+          <button id="btn-auto" type="button" class="ctrl-btn" title="自動播放 (A)">
+            <span class="ctrl-icon">Auto</span>
+            <span class="ctrl-label">自動</span>
+          </button>
+          <button id="btn-skip" type="button" class="ctrl-btn" title="已讀快進 (S / Ctrl)">
+            <span class="ctrl-icon">&gt;&gt;</span>
+            <span class="ctrl-label">快進</span>
+          </button>
+          <button id="btn-hide-ui" type="button" class="ctrl-btn" title="隱藏介面 (H)">
+            <span class="ctrl-icon">Hide</span>
+            <span class="ctrl-label">隱藏</span>
+          </button>
+          <button id="btn-mute" type="button" class="ctrl-btn" title="靜音切換">
+            <span id="mute-icon-text" class="ctrl-icon">音</span>
+            <span id="mute-label-text" class="ctrl-label">音效</span>
+          </button>
+          <button id="btn-settings" type="button" class="ctrl-btn" title="系統設定 (Esc)">
+            <span class="ctrl-icon">Set</span>
+            <span class="ctrl-label">設定</span>
+          </button>
+          <button id="btn-title" type="button" class="ctrl-btn" title="回到標題">
+            <span class="ctrl-icon">Top</span>
+            <span class="ctrl-label">標題</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 選擇肢群組 -->
+      <div id="choices-layer" class="choices-layer is-hidden" role="group" aria-label="劇情選擇">
+        <div id="choices-list" class="choices-list"></div>
+      </div>
+
+      <!-- 日式障子木格對話框 -->
+      <section id="dialogue-box" class="dialogue-box" aria-live="polite">
+        <div id="shimmer-bar" class="shimmer-bar"></div>
+        <div id="mindset-toast" class="mindset-toast">✦ 心境產生了波動</div>
+        <div id="nameplate" class="nameplate is-hidden">
+          <span id="nameplate-text"></span>
+        </div>
+        <div class="dialogue-inner">
+          <div id="mode-badge" class="mode-badge is-hidden"></div>
+          <p id="dialogue-text" class="dialogue-text"></p>
+          <span id="dialogue-cursor" class="dialogue-cursor is-hidden" aria-hidden="true">▼</span>
+        </div>
+      </section>
+
+      <!-- 隱藏 UI 恢復觸控遮罩 -->
+      <div id="hide-ui-overlay" class="hide-ui-overlay is-hidden" aria-label="點擊恢復介面"></div>
+
+      <!-- 結局收束摘要疊層 -->
+      <section id="ending-overlay" class="ending-overlay is-hidden" aria-label="結局總結">
+        <div class="ending-card">
+          <div class="ending-card-inner">
+            <p id="ending-code" class="ending-code">ENDING C</p>
+            <h2 id="ending-title" class="ending-title">夏末彼岸的微光</h2>
+            <div class="ending-meta-row">
+              <span id="ending-badge" class="ending-badge">True End</span>
+              <span id="ending-unlock-progress" class="ending-progress">已解鎖結局 1 / 4</span>
+            </div>
+            <p id="ending-quote" class="ending-quote"></p>
+            <p id="ending-summary" class="ending-summary"></p>
+            <div class="ending-actions">
+              <button id="btn-ending-gallery" type="button" class="modal-btn modal-btn-primary">瀏覽結局圖鑑</button>
+              <button id="btn-ending-load" type="button" class="modal-btn">讀取存檔重試</button>
+              <button id="btn-ending-title" type="button" class="modal-btn">回到標題畫面</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 轉場黑幕 -->
+      <div id="scene-transition-curtain" class="scene-transition-curtain"></div>
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- 3. 系統彈窗群 (Modals)                                              -->
+    <!-- =================================================================== -->
+    <div id="modal-backdrop" class="modal-backdrop is-hidden" role="dialog" aria-modal="true">
+      <!-- 存檔 / 讀檔視窗 -->
+      <section id="modal-saveload" class="modal-panel is-hidden">
+        <header class="modal-header">
+          <div>
+            <h2 id="saveload-title" class="modal-title">存檔紀錄</h2>
+            <p class="modal-subtitle">進度安全儲存於本地瀏覽器（支援 3 組手動存檔＋快速存讀）</p>
+          </div>
+          <button type="button" class="modal-close-btn" data-close-modal aria-label="關閉">✕</button>
+        </header>
+
+        <div id="saveload-mindset" class="saveload-mindset">
+          <div class="mindset-dots" aria-hidden="true">
+            <span id="dot-dep" class="mindset-dot" title="內在依賴傾向"></span>
+            <span id="dot-out" class="mindset-dot" title="外界連結傾向"></span>
+            <span id="dot-truth" class="mindset-dot" title="真相直面傾向"></span>
+          </div>
+          <p id="saveload-mindset-text" class="mindset-caption">「夏末的風穿過走廊，時間彷彿正站在十字路口。」</p>
+        </div>
+
+        <div class="quicksave-bar">
+          <button id="btn-quicksave" type="button" class="modal-btn modal-btn-sm">⚡ 快速存檔 (Q.Save)</button>
+          <button id="btn-quickload" type="button" class="modal-btn modal-btn-sm">↻ 快速讀取 (Q.Load)</button>
+          <span id="quicksave-info" class="quicksave-info">尚無快速存檔</span>
+        </div>
+
+        <div id="save-slots-list" class="save-slots-list"></div>
+      </section>
+
+      <!-- 對話紀錄視窗 -->
+      <section id="modal-log" class="modal-panel modal-panel-wide is-hidden">
+        <header class="modal-header">
+          <div>
+            <h2 class="modal-title">對話紀錄（Log）</h2>
+            <p class="modal-subtitle">最多保留最近 80 句對話與關鍵抉擇</p>
+          </div>
+          <button type="button" class="modal-close-btn" data-close-modal aria-label="關閉">✕</button>
+        </header>
+        <div id="log-list" class="log-list"></div>
+      </section>
+
+      <!-- 結局與 CG 鑑賞室視窗 -->
+      <section id="modal-gallery" class="modal-panel modal-panel-wide is-hidden">
+        <header class="modal-header">
+          <div>
+            <h2 class="modal-title">結局與 CG 鑑賞 <span id="gallery-modal-count" class="gallery-pill">0 / 4</span></h2>
+            <p class="modal-subtitle">探索四種夏末抉擇與關鍵事件插畫，拼湊十年前的完整記憶</p>
+          </div>
+          <button type="button" class="modal-close-btn" data-close-modal aria-label="關閉">✕</button>
+        </header>
+        <div class="gallery-tabs" role="tablist">
+          <button id="tab-gallery-endings" type="button" class="gallery-tab-btn is-active" role="tab" aria-selected="true">結局圖鑑</button>
+          <button id="tab-gallery-cgs" type="button" class="gallery-tab-btn" role="tab" aria-selected="false">事件 CG 回想 <span id="gallery-cg-count" class="gallery-pill">0 / 6</span></button>
+        </div>
+        <div id="gallery-grid" class="gallery-grid"></div>
+        <div id="gallery-detail" class="gallery-detail is-hidden">
+          <div class="gallery-detail-thumb-wrap">
+            <img id="gallery-detail-img" src="assets/cg_epilogue.png" alt="" class="gallery-detail-img" />
+          </div>
+          <div class="gallery-detail-body">
+            <p id="gallery-detail-code" class="ending-code"></p>
+            <h3 id="gallery-detail-title" class="gallery-detail-title"></h3>
+            <p id="gallery-detail-quote" class="ending-quote"></p>
+            <p id="gallery-detail-summary" class="ending-summary"></p>
+            <div id="gallery-detail-tags" class="gallery-tags"></div>
+            <button id="btn-gallery-back" type="button" class="modal-btn modal-btn-sm">← 返回圖鑑列表</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 系統設定視窗 -->
+      <section id="modal-settings" class="modal-panel is-hidden">
+        <header class="modal-header">
+          <div>
+            <h2 class="modal-title">音效與閱讀設定</h2>
+            <p class="modal-subtitle">調整背景音樂、夏蟬環境音與對話播放節奏</p>
+          </div>
+          <button type="button" class="modal-close-btn" data-close-modal aria-label="關閉">✕</button>
+        </header>
+
+        <div class="settings-list">
+          <label class="setting-row">
+            <span class="setting-label">全域靜音（Mute All）</span>
+            <input id="set-muted" type="checkbox" class="setting-checkbox" />
+          </label>
+
+          <div class="setting-row setting-row-range">
+            <div class="setting-range-head">
+              <span class="setting-label">背景音樂音量（BGM）</span>
+              <span id="val-bgm-vol" class="setting-val">70%</span>
+            </div>
+            <input id="set-bgm-vol" type="range" min="0" max="100" value="70" class="setting-range" />
+          </div>
+
+          <div class="setting-row setting-row-range">
+            <div class="setting-range-head">
+              <span class="setting-label">音效與介面音量（SFX）</span>
+              <span id="val-sfx-vol" class="setting-val">80%</span>
+            </div>
+            <input id="set-sfx-vol" type="range" min="0" max="100" value="80" class="setting-range" />
+          </div>
+
+          <label class="setting-row">
+            <span class="setting-label">夏蟬環境音層（Cicada Ambience）</span>
+            <input id="set-cicada" type="checkbox" class="setting-checkbox" checked />
+          </label>
+
+          <div class="setting-row setting-row-range">
+            <div class="setting-range-head">
+              <span class="setting-label">文字顯示速度</span>
+              <span id="val-text-speed" class="setting-val">標準</span>
+            </div>
+            <input id="set-text-speed" type="range" min="12" max="50" value="28" class="setting-range" />
+          </div>
+
+          <div class="setting-row setting-row-range">
+            <div class="setting-range-head">
+              <span class="setting-label">自動播放停頓時間（Auto）</span>
+              <span id="val-auto-speed" class="setting-val">1.6 秒</span>
+            </div>
+            <input id="set-auto-speed" type="range" min="800" max="3200" step="200" value="1600" class="setting-range" />
+          </div>
+
+          <label class="setting-row">
+            <span class="setting-label">存檔面板顯示「心境側寫」微提示</span>
+            <input id="set-mindset-hint" type="checkbox" class="setting-checkbox" checked />
+          </label>
+
+          <label class="setting-row">
+            <span class="setting-label">強制快進模式（允許跳過未讀劇情）</span>
+            <input id="set-force-skip" type="checkbox" class="setting-checkbox" />
+          </label>
+        </div>
+
+        <footer class="settings-footer">
+          <span class="shortcut-hint">快捷鍵：Space/Enter 推進・A 自動・S/Ctrl 快進・H 隱藏・L 紀錄・Esc 設定</span>
+        </footer>
+      </section>
+
+      <!-- 確認視窗 -->
+      <section id="modal-confirm" class="modal-panel modal-panel-sm is-hidden">
+        <header class="modal-header">
+          <h2 id="confirm-title" class="modal-title">確認操作</h2>
+          <button type="button" class="modal-close-btn" data-close-modal aria-label="關閉">✕</button>
+        </header>
+        <p id="confirm-message" class="confirm-message"></p>
+        <div class="confirm-actions">
+          <button id="btn-confirm-cancel" type="button" class="modal-btn">取消</button>
+          <button id="btn-confirm-ok" type="button" class="modal-btn modal-btn-primary">確定</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- 輕量提示浮標 -->
+    <div id="toast-banner" class="toast-banner is-hidden" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="script_data.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
