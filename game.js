@@ -143,7 +143,7 @@
     saveLoadMode: 'save',
 
     // 遊戲進度資料
-    currentNodeId: 'sc_01',
+    currentNodeId: 'sc_00a',
     currentLineIndex: 0,
     currentLines: [],
     gameState: VN.createInitialGameState(),
@@ -601,7 +601,7 @@
       el.choicesLayer.classList.add('is-hidden');
 
       switchToStage();
-      enterNode('sc_01');
+      enterNode('sc_00a');
 
       setTimeout(() => {
         el.curtain.classList.remove('is-active');
