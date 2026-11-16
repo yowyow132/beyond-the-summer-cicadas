@@ -504,10 +504,18 @@
     }
 
     preloadBGMTracks() {
-      if (!this.ctx || window.location.protocol === 'file:') return;
-      Object.keys(BGM_FILES).forEach((id) => {
-        this._loadBGMBuffer(id).catch(() => {});
-      });
+      if (!this.ctx || window.location.protocol === 'file:' || this._bgmPreloadingStarted) return;
+      this._bgmPreloadingStarted = true;
+      const queue = Object.keys(BGM_FILES).filter((id) => id !== 'title_breeze');
+      let i = 0;
+      const next = () => {
+        if (i >= queue.length) return;
+        const id = queue[i++];
+        this._loadBGMBuffer(id)
+          .catch(() => {})
+          .finally(() => setTimeout(next, 250));
+      };
+      setTimeout(next, 600);
     }
 
     setAudioSettings(partial) {

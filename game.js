@@ -191,22 +191,52 @@
   // 資源預載（消除轉場與換表情閃爍）
   // ===========================================================================
   function preloadAllAssets() {
-    const urls = [];
-    Object.values(VN.ASSETS.backgrounds).forEach((src) => urls.push(src));
+    const priorityUrls = [
+      VN.ASSETS.backgrounds.bg_oldhouse,
+      VN.ASSETS.characters.kotori.sprites.idle,
+      VN.ASSETS.characters.natsumi.sprites.smile,
+      VN.ASSETS.backgrounds.bg_nightroom_blackout,
+      VN.ASSETS.characters.kotori.sprites.tense,
+      VN.ASSETS.characters.kotori.sprites.sad,
+      VN.ASSETS.characters.natsumi.sprites.serious,
+      VN.ASSETS.characters.natsumi.sprites.idle
+    ];
+    const seen = new Set();
+    const queue = [];
+    const pushUnique = (u) => {
+      if (u && !seen.has(u)) {
+        seen.add(u);
+        queue.push(u);
+      }
+    };
+    priorityUrls.forEach(pushUnique);
+    Object.values(VN.ASSETS.backgrounds).forEach(pushUnique);
     Object.values(VN.ASSETS.characters).forEach((ch) => {
-      if (ch.sprites) {
-        Object.values(ch.sprites).forEach((src) => urls.push(src));
-      }
+      if (ch.sprites) Object.values(ch.sprites).forEach(pushUnique);
       if (ch.outfits) {
-        Object.values(ch.outfits).forEach((outfitMap) => {
-          Object.values(outfitMap).forEach((src) => urls.push(src));
-        });
+        Object.values(ch.outfits).forEach((m) => Object.values(m).forEach(pushUnique));
       }
     });
-    urls.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
+
+    const startSequentialPreload = () => {
+      let idx = 0;
+      const concurrency = 2;
+      const pump = () => {
+        if (idx >= queue.length) return;
+        const src = queue[idx++];
+        const img = new Image();
+        img.decoding = 'async';
+        img.onload = img.onerror = () => pump();
+        img.src = src;
+      };
+      for (let i = 0; i < concurrency; i++) pump();
+    };
+
+    if (document.readyState === 'complete') {
+      setTimeout(startSequentialPreload, 350);
+    } else {
+      window.addEventListener('load', () => setTimeout(startSequentialPreload, 350), { once: true });
+    }
   }
 
   // ===========================================================================

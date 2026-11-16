@@ -8,34 +8,34 @@
 
   const ASSETS = {
     backgrounds: {
-      bg_nightroom_blackout: 'assets/bg_nightroom_blackout.png',
-      bg_oldhouse: 'assets/bg_oldhouse.png',
-      bg_embankment: 'assets/bg_embankment.png',
-      bg_shrine: 'assets/bg_shrine.png',
-      bg_nightroom: 'assets/bg_nightroom.png',
-      cg_rain_hair: 'assets/cg_rain_hair.png',
-      cg_night_embrace: 'assets/cg_night_embrace.png',
-      cg_shrine_confront: 'assets/cg_shrine_confront.png',
-      cg_sealed_window: 'assets/cg_sealed_window.png',
-      cg_dawn_horizon: 'assets/cg_dawn_horizon.png',
-      cg_epilogue: 'assets/cg_epilogue.png'
+      bg_nightroom_blackout: 'assets/bg_nightroom_blackout.webp',
+      bg_oldhouse: 'assets/bg_oldhouse.webp',
+      bg_embankment: 'assets/bg_embankment.webp',
+      bg_shrine: 'assets/bg_shrine.webp',
+      bg_nightroom: 'assets/bg_nightroom.webp',
+      cg_rain_hair: 'assets/cg_rain_hair.webp',
+      cg_night_embrace: 'assets/cg_night_embrace.webp',
+      cg_shrine_confront: 'assets/cg_shrine_confront.webp',
+      cg_sealed_window: 'assets/cg_sealed_window.webp',
+      cg_dawn_horizon: 'assets/cg_dawn_horizon.webp',
+      cg_epilogue: 'assets/cg_epilogue.webp'
     },
     characters: {
       kotori: {
         name: '小鳥遊 琴理',
         shortName: '琴理',
         sprites: {
-          idle: 'assets/char_kotori_idle.png',
-          smile: 'assets/char_kotori_smile.png',
-          sad: 'assets/char_kotori_sad.png',
-          tense: 'assets/char_kotori_tense.png'
+          idle: 'assets/char_kotori_idle.webp',
+          smile: 'assets/char_kotori_smile.webp',
+          sad: 'assets/char_kotori_sad.webp',
+          tense: 'assets/char_kotori_tense.webp'
         },
         outfits: {
           white_sundress: {
-            idle: 'assets/char_kotori_idle.png',
-            smile: 'assets/char_kotori_smile.png',
-            sad: 'assets/char_kotori_sad.png',
-            tense: 'assets/char_kotori_tense.png'
+            idle: 'assets/char_kotori_idle.webp',
+            smile: 'assets/char_kotori_smile.webp',
+            sad: 'assets/char_kotori_sad.webp',
+            tense: 'assets/char_kotori_tense.webp'
           }
         }
       },
@@ -43,17 +43,17 @@
         name: '宮代 夏實',
         shortName: '夏實',
         sprites: {
-          idle: 'assets/char_natsumi_idle.png',
-          smile: 'assets/char_natsumi_smile.png',
-          sad: 'assets/char_natsumi_sad.png',
-          serious: 'assets/char_natsumi_serious.png'
+          idle: 'assets/char_natsumi_idle.webp',
+          smile: 'assets/char_natsumi_smile.webp',
+          sad: 'assets/char_natsumi_sad.webp',
+          serious: 'assets/char_natsumi_serious.webp'
         },
         outfits: {
           summer_casual: {
-            idle: 'assets/char_natsumi_idle.png',
-            smile: 'assets/char_natsumi_smile.png',
-            sad: 'assets/char_natsumi_sad.png',
-            serious: 'assets/char_natsumi_serious.png'
+            idle: 'assets/char_natsumi_idle.webp',
+            smile: 'assets/char_natsumi_smile.webp',
+            sad: 'assets/char_natsumi_sad.webp',
+            serious: 'assets/char_natsumi_serious.webp'
           }
         }
       }

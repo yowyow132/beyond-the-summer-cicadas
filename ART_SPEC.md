@@ -84,40 +84,40 @@
 > 1. 所有背景／CG／立繪均由本地 `StabilityMatrix`（`Stable Diffusion WebUI Forge - Neo` + `novaAnimeXL_ilV180.safetensors` + `4x-AnimeSharp` 超採樣至 `1600×900`）在同一套日系動畫賽璐璐（Cel-shaded）畫風下完稿。  
 > 2. 琴理（`kotori`）與夏實（`natsumi`）之立繪與關鍵 CG（`cg_rain_hair`、`cg_night_embrace`、`cg_shrine_confront`、`cg_dawn_horizon`）均已通過 `ADetailer` + `unify_appearance.py` 瞳色與髮色鎖定，維持跨場景瞳色與服裝細節 100% 一致。
 
-### 6.1 背景與事件／結局 CG 素材（11 張，1600×900 16:9 RGB PNG，無 UI 文字）
+### 6.1 背景與事件／結局 CG 素材（11 張，1600×900 16:9 WebP，無 UI 文字，總計 ~1.3 MB）
 
 | 檔案路徑 | 對應 ID | 實測尺寸 | 狀態 | 實測規格／視覺設計說明 |
 | :--- | :--- | :--- | :--- | :--- |
-| `assets/bg_nightroom_blackout.png` | `bg_nightroom_blackout` | `1600×900` | ✅ 新增完稿 | **RGB PNG（Act 0 / Act III 停電夜專用）**。暴雨停電深夜的和室一角，和紙檯燈完全熄滅、窗外濃重暴雨夜色、木造佛壇底層抽屜半開且榻榻米散落紙角，僅一道微弱暖黃手電筒光束斜照抽屜邊緣。 |
-| `assets/bg_oldhouse.png` | `bg_oldhouse` | `1600×900` | ✅ 已完成 | **RGB PNG**。夏末午後日光斜照的日本鄉間木造舊宅緣廊、屋簷下透光玻璃風鈴、庭院杉林與晴空。 |
-| `assets/bg_embankment.png` | `bg_embankment` | `1600×900` | ✅ 已完成 | **RGB PNG**。鄉間河川青草堤防與舊混凝土水閘、黃昏積雨雲映照水面、隨風搖曳的銀白芒草。 |
-| `assets/bg_shrine.png` | `bg_shrine` | `1600×900` | ✅ 已完成 | **RGB PNG**。林蔭斑駁光影中的鄉間神社石階、未上漆的風化杉木鳥居、社殿屋簷下玻璃風鈴。 |
-| `assets/bg_nightroom.png` | `bg_nightroom` | `1600×900` | ✅ 已完成 | **RGB PNG**。常態深夜舊宅和室，暖黃和紙檯燈微光、清冷月光透過木格障子窗灑入榻榻米。 |
-| `assets/cg_rain_hair.png` | `cg_rain_hair` | `1600×900` | ✅ 已完成 | **RGB PNG（CG 01）**。Act I `sc_09`–`sc_11b`：第二日驟雨午後，在室內以白毛巾替琴理拭乾濕髮的近距心理試探。 |
-| `assets/cg_night_embrace.png` | `cg_night_embrace` | `1600×900` | ✅ 已完成 | **RGB PNG（CG 02）**。Act I `sc_14`–`sc_15b`：第三日深夜圓窗月光下，揭穿彼此私心與逃避的近距依偎。 |
-| `assets/cg_shrine_confront.png` | `cg_shrine_confront` | `1600×900` | ✅ 已完成 | **RGB PNG（CG 03）**。Act II `sc_20`–`sc_24`：暴雨神社屋簷下，夏實捧著綴有紅蠟印的十年前舊賠償信坦白火災內情。 |
-| `assets/cg_sealed_window.png` | `cg_sealed_window` | `1600×900` | ✅ 已完成 | **RGB PNG（CG 04）**。Ending A `ending_sealed`：雨戶門栓緊閉後只透出微暗琥珀餘暉的和室封閉結局。 |
-| `assets/cg_dawn_horizon.png` | `cg_dawn_horizon` | `1600×900` | ✅ 已完成 | **RGB PNG（CG 05）**。Ending C `ending_dawn`（True End）：破曉打開雨戶後迎向晨曦與玻璃風鈴微風的清醒結局。 |
-| `assets/cg_epilogue.png` | `cg_epilogue` | `1600×900` | ✅ 已完成 | **RGB PNG（CG 06）**。Ending B / Ending D 共用遠景插畫：清晨敞開緣廊望向霧氣山脊與村口遠方的留白終幕。 |
+| `assets/bg_nightroom_blackout.webp` | `bg_nightroom_blackout` | `1600×900` | ✅ 新增完稿 | **WebP（Act 0 / Act III 停電夜專用）**。暴雨停電深夜的和室一角，和紙檯燈完全熄滅、窗外濃重暴雨夜色、木造佛壇底層抽屜半開且榻榻米散落紙角，僅一道微弱暖黃手電筒光束斜照抽屜邊緣。 |
+| `assets/bg_oldhouse.webp` | `bg_oldhouse` | `1600×900` | ✅ 已完成 | **WebP**。夏末午後日光斜照的日本鄉間木造舊宅緣廊、屋簷下透光玻璃風鈴、庭院杉林與晴空。 |
+| `assets/bg_embankment.webp` | `bg_embankment` | `1600×900` | ✅ 已完成 | **WebP**。鄉間河川青草堤防與舊混凝土水閘、黃昏積雨雲映照水面、隨風搖曳的銀白芒草。 |
+| `assets/bg_shrine.webp` | `bg_shrine` | `1600×900` | ✅ 已完成 | **WebP**。林蔭斑駁光影中的鄉間神社石階、未上漆的風化杉木鳥居、社殿屋簷下玻璃風鈴。 |
+| `assets/bg_nightroom.webp` | `bg_nightroom` | `1600×900` | ✅ 已完成 | **WebP**。常態深夜舊宅和室，暖黃和紙檯燈微光、清冷月光透過木格障子窗灑入榻榻米。 |
+| `assets/cg_rain_hair.webp` | `cg_rain_hair` | `1600×900` | ✅ 已完成 | **WebP（CG 01）**。Act I `sc_09`–`sc_11b`：第二日驟雨午後，在室內以白毛巾替琴理拭乾濕髮的近距心理試探。 |
+| `assets/cg_night_embrace.webp` | `cg_night_embrace` | `1600×900` | ✅ 已完成 | **WebP（CG 02）**。Act I `sc_14`–`sc_15b`：第三日深夜圓窗月光下，揭穿彼此私心與逃避的近距依偎。 |
+| `assets/cg_shrine_confront.webp` | `cg_shrine_confront` | `1600×900` | ✅ 已完成 | **WebP（CG 03）**。Act II `sc_20`–`sc_24`：暴雨神社屋簷下，夏實捧著綴有紅蠟印的十年前舊賠償信坦白火災內情。 |
+| `assets/cg_sealed_window.webp` | `cg_sealed_window` | `1600×900` | ✅ 已完成 | **WebP（CG 04）**。Ending A `ending_sealed`：雨戶門栓緊閉後只透出微暗琥珀餘暉的和室封閉結局。 |
+| `assets/cg_dawn_horizon.webp` | `cg_dawn_horizon` | `1600×900` | ✅ 已完成 | **WebP（CG 05）**。Ending C `ending_dawn`（True End）：破曉打開雨戶後迎向晨曦與玻璃風鈴微風的清醒結局。 |
+| `assets/cg_epilogue.webp` | `cg_epilogue` | `1600×900` | ✅ 已完成 | **WebP（CG 06）**。Ending B / Ending D 共用遠景插畫：清晨敞開緣廊望向霧氣山脊與村口遠方的留白終幕。 |
 
-### 6.2 角色多表情去背立繪（8 張，透明 RGBA PNG，含 `OUTFIT` 對齊）
+### 6.2 角色多表情去背立繪（8 張，透明 RGBA WebP，含 `OUTFIT` 對齊，每張 ~80 KB）
 
-所有角色立繪均鎖定統一基準構圖與瞳色，經邊界連通域去背＋非綠封閉區防誤挖保護＋邊緣 Despill 處理，零綠邊／零破洞：
+所有角色立繪均鎖定統一基準構圖與瞳色，經邊界連通域去背＋非綠封閉區防誤挖保護＋邊緣 Despill 與無損 Alpha 壓縮（`alpha_quality=100`），零綠邊／零破洞：
 
-1. **Heroine 1：`kotori` — 小鳥遊 琴理**（`OUTFIT: white_sundress`，齊腰銀白淡灰長直髮＋黑色髮夾、白色細肩帶純白夏季連身洋裝、淡紫靛藍灰瞳色）— 統一輸出 **`545×900` RGBA PNG**
-   - `assets/char_kotori_idle.png`（基準圖，安靜淡然凝視）— ✅ 已完成（`545×900`）
-   - `assets/char_kotori_smile.png`（柔和放鬆淺笑，臉型服裝像素對齊）— ✅ 已完成（`545×900`）
-   - `assets/char_kotori_sad.png`（垂眸脆弱哀傷，臉型服裝像素對齊）— ✅ 已完成（`545×900`）
-   - `assets/char_kotori_tense.png`（緊繃戒備微紅雙頰，臉型服裝像素對齊）— ✅ 已完成（`545×900`）
-2. **Heroine 2：`natsumi` — 宮代 夏實**（`OUTFIT: summer_casual`，暖棕栗色側馬尾長髮、琥珀暖棕瞳色、米白夏裝襯衫配深藍百褶裙）— 統一輸出 **`494×900` RGBA PNG**
-   - `assets/char_natsumi_idle.png`（基準圖，溫和沉穩）— ✅ 已完成（`494×900`）
-   - `assets/char_natsumi_smile.png`（開朗溫暖夏日微笑，臉型服裝像素對齊）— ✅ 已完成（`494×900`）
-   - `assets/char_natsumi_sad.png`（苦澀失落欲言又止，臉型服裝像素對齊）— ✅ 已完成（`494×900`）
-   - `assets/char_natsumi_serious.png`（眼神堅定凝重直視，臉型服裝像素對齊）— ✅ 已完成（`494×900`）
+1. **Heroine 1：`kotori` — 小鳥遊 琴理**（`OUTFIT: white_sundress`，齊腰銀白淡灰長直髮＋黑色髮夾、白色細肩帶純白夏季連身洋裝、淡紫靛藍灰瞳色）— 統一輸出 **`545×900` RGBA WebP**
+   - `assets/char_kotori_idle.webp`（基準圖，安靜淡然凝視）— ✅ 已完成（`545×900`）
+   - `assets/char_kotori_smile.webp`（柔和放鬆淺笑，臉型服裝像素對齊）— ✅ 已完成（`545×900`）
+   - `assets/char_kotori_sad.webp`（垂眸脆弱哀傷，臉型服裝像素對齊）— ✅ 已完成（`545×900`）
+   - `assets/char_kotori_tense.webp`（緊繃戒備微紅雙頰，臉型服裝像素對齊）— ✅ 已完成（`545×900`）
+2. **Heroine 2：`natsumi` — 宮代 夏實**（`OUTFIT: summer_casual`，暖棕栗色側馬尾長髮、琥珀暖棕瞳色、米白夏裝襯衫配深藍百褶裙）— 統一輸出 **`494×900` RGBA WebP**
+   - `assets/char_natsumi_idle.webp`（基準圖，溫和沉穩）— ✅ 已完成（`494×900`）
+   - `assets/char_natsumi_smile.webp`（開朗溫暖夏日微笑，臉型服裝像素對齊）— ✅ 已完成（`494×900`）
+   - `assets/char_natsumi_sad.webp`（苦澀失落欲言又止，臉型服裝像素對齊）— ✅ 已完成（`494×900`）
+   - `assets/char_natsumi_serious.webp`（眼神堅定凝重直視，臉型服裝像素對齊）— ✅ 已完成（`494×900`）
 
 ---
 
 ## 7. 完稿驗證標準
 
-1. 全數 **19 張** `assets/*.png`（5 背景 + 6 CG + 8 立繪）與 `SCRIPT_SPEC.md` §2 `Required Assets Checklist` **1-to-1 完全覆蓋**，並於實機深色舞台與跨視口（`1280×800`、`390×844`）驗證通過，無透明破洞或綠邊暈染。
+1. 全數 **19 張** `assets/*.webp`（5 背景 + 6 CG + 8 立繪，全圖共 `1.95 MB`）與 `SCRIPT_SPEC.md` §2 `Required Assets Checklist` **1-to-1 完全覆蓋**，並配合分批優先預載確保首屏秒開、跨視口（`1280×800`、`390×844`）無破洞或綠邊。
 2. 同一角色之 4 款表情差分鎖定完全一致之像素寬高、瞳色、髮色與定位（`kotori` `545×900`、`natsumi` `494×900`），切換表情零偏移。

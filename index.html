@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>夏末蟬鳴的彼岸｜Beyond the Summer Cicadas</title>
-  <link rel="icon" type="image/png" href="assets/cg_epilogue.png" />
+  <link rel="icon" type="image/webp" href="assets/cg_epilogue.webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet" />
@@ -17,15 +17,15 @@
     <!-- =================================================================== -->
     <section id="title-screen" class="title-screen is-active" aria-label="標題畫面">
       <div class="title-backdrop">
-        <img src="assets/bg_oldhouse.png" alt="" class="title-bg-img title-bg-main" />
-        <img src="assets/cg_dawn_horizon.png" alt="" class="title-bg-img title-bg-alt" />
+        <img src="assets/bg_oldhouse.webp" alt="" class="title-bg-img title-bg-main" fetchpriority="high" decoding="async" />
+        <img src="assets/cg_dawn_horizon.webp" alt="" class="title-bg-img title-bg-alt" loading="lazy" decoding="async" />
         <div class="title-scrim"></div>
       </div>
 
       <!-- 右側女主角主視覺立繪展示 -->
       <div class="title-hero-showcase" aria-hidden="true">
-        <img src="assets/char_natsumi_idle.png" alt="" class="title-hero-char title-hero-secondary" />
-        <img src="assets/char_kotori_idle.png" alt="" class="title-hero-char title-hero-primary" />
+        <img src="assets/char_natsumi_idle.webp" alt="" class="title-hero-char title-hero-secondary" decoding="async" />
+        <img src="assets/char_kotori_idle.webp" alt="" class="title-hero-char title-hero-primary" fetchpriority="high" decoding="async" />
       </div>
 
       <div class="title-content">
@@ -268,7 +268,7 @@
         <div id="gallery-grid" class="gallery-grid"></div>
         <div id="gallery-detail" class="gallery-detail is-hidden">
           <div class="gallery-detail-thumb-wrap">
-            <img id="gallery-detail-img" src="assets/cg_epilogue.png" alt="" class="gallery-detail-img" />
+            <img id="gallery-detail-img" src="assets/cg_epilogue.webp" alt="" class="gallery-detail-img" loading="lazy" decoding="async" />
           </div>
           <div class="gallery-detail-body">
             <p id="gallery-detail-code" class="ending-code"></p>
