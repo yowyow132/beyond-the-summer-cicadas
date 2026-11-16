@@ -224,7 +224,7 @@
       bg: 'bg_nightroom_blackout',
       clearChars: true,
       bgm: 'tension_secret',
-      sfx: 'heartbeat',
+      sfx: ['rain_ambience', 'heartbeat'],
       lines: [
         { speaker: 'narrator', text: '暴雨切斷村裡輸電線已經過了十分鐘。手電筒的光柱突然暗了一半，搖開背蓋一摸——裡面只剩一顆電池。' },
         { speaker: 'narrator', text: '就著快熄滅的微光，我從佛壇最底層抽屜的線香盒底下，摸出半張被整齊撕開的《轉校與撫養權協議書》。' },
@@ -377,7 +377,7 @@
       sceneTitle: '閃回・第二日驟雨的毛巾',
       cg: 'cg_rain_hair',
       bgm: 'twilight_memory',
-      sfx: 'door_slide',
+      sfx: ['rain_ambience', 'door_slide'],
       clearChars: true,
       lines: [
         { speaker: 'narrator', text: '第二天午後驟雨砸上屋簷，外頭拉起一片藍灰水霧。我跪坐在榻榻米上替剛淋濕進門的琴理按乾水氣，小檯燈把我們之間照得過分安靜。' },
@@ -438,7 +438,7 @@
       sceneTitle: '閃回・第二日傍晚的訪客',
       bg: 'bg_oldhouse',
       bgm: 'summer_day',
-      sfx: 'wind_chime',
+      sfx: ['cicada_ambience', 'wind_chime'],
       chars: [{ id: 'natsumi', outfit: 'summer_casual', expr: 'smile', pos: 'center' }],
       lines: [
         { speaker: 'narrator', text: '雨勢剛歇，夏實推著腳踏車停在竹門外，將袋子裡的冰麥茶遞進門廊——目光卻比昨天多停了一眼牆角那些始終沒拆開的紙箱。' },
@@ -512,6 +512,7 @@
       id: 'sc_16',
       sceneTitle: '閃回・第三日深夜的圓窗',
       bg: 'bg_nightroom',
+      stopAmbience: true,
       sfx: 'memory_flash',
       clearChars: true,
       lines: [
@@ -575,7 +576,7 @@
       sceneTitle: '閃回・暴雨簷下的贖罪',
       cg: 'cg_shrine_confront',
       bgm: 'climax_choice',
-      sfx: 'heartbeat',
+      sfx: ['rain_ambience', 'heartbeat'],
       clearChars: true,
       lines: [
         { speaker: 'narrator', text: '暴雨傾瀉而下，兩人衝進神社偏殿屋簷底下。夏實沒有擦臉上的水珠，只是從懷裡掏出一封綴著紅蠟印、卻始終沒送出去的舊信封，雙手死死按在胸口。' },
@@ -631,6 +632,7 @@
       id: 'sc_25',
       sceneTitle: '閃回・未拆的信封',
       bg: 'bg_shrine',
+      stopAmbience: true,
       sfx: 'wind_chime',
       chars: [{ id: 'natsumi', outfit: 'summer_casual', expr: 'sad', pos: 'center' }],
       lines: [
@@ -659,7 +661,7 @@
       sceneTitle: '現在・三方對峙',
       bg: 'bg_nightroom_blackout',
       bgm: 'tension_secret',
-      sfx: 'heartbeat',
+      sfx: ['rain_ambience', 'heartbeat'],
       chars: [
         { id: 'kotori', outfit: 'white_sundress', expr: 'tense', pos: 'left' },
         { id: 'natsumi', outfit: 'summer_casual', expr: 'serious', pos: 'right' }
@@ -1169,11 +1171,57 @@
     return resonance;
   }
 
+  const ROUTE_FLOWCHART = [
+    {
+      choiceNodeId: 'sc_03',
+      stepLabel: '抉擇 1・Act 0 停電佛壇前',
+      branches: [
+        { targetId: 'sc_04a', label: '藏起協議書替她掩護' },
+        { targetId: 'sc_04b', label: '當面舉紙追問協議書' },
+        { targetId: 'sc_04c', label: '先打開玄關讓夏實進屋' }
+      ]
+    },
+    {
+      choiceNodeId: 'sc_10',
+      stepLabel: '抉擇 2・Act I 驟雨毛巾',
+      branches: [
+        { targetId: 'sc_11a', label: '將東京來電關成靜音' },
+        { targetId: 'sc_11b', label: '堅持該回的電話必須回' }
+      ]
+    },
+    {
+      choiceNodeId: 'sc_14',
+      stepLabel: '抉擇 3・Act I 深夜圓窗',
+      branches: [
+        { targetId: 'sc_15a', label: '順從依偎、回避真正理由' },
+        { targetId: 'sc_15b', label: '坦承留下有一半為了自己' }
+      ]
+    },
+    {
+      choiceNodeId: 'sc_19',
+      stepLabel: '抉擇 4・Act II 堤防舊帳',
+      branches: [
+        { targetId: 'sc_20', label: '追問十年前偏廂火災真相' },
+        { targetId: 'sc_25', label: '壓下舊帳只取聯絡單' }
+      ]
+    },
+    {
+      choiceNodeId: 'sc_33',
+      stepLabel: '抉擇 5・Act III 深夜最終攤牌',
+      branches: [
+        { targetId: 'sc_34a', label: '將夏實關在門外並落栓' },
+        { targetId: 'sc_34b', label: '收下電池與車票先行離開' },
+        { targetId: 'sc_34c', label: '坦白懦弱並將選擇權交還琴理' }
+      ]
+    }
+  ];
+
   global.VN_SCRIPT = {
     ASSETS: ASSETS,
     SPEAKER_NAMES: SPEAKER_NAMES,
     CG_META: CG_META,
     ENDINGS_META: ENDINGS_META,
+    ROUTE_FLOWCHART: ROUTE_FLOWCHART,
     NODES: NODES,
     createInitialGameState: createInitialGameState,
     resolveNodeLines: resolveNodeLines,

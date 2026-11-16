@@ -388,7 +388,7 @@ Galgame 的長篇閱讀是否舒適，**80% 取決於打字機音效不刺耳且
 | `audioEngine.unlock()` | 解鎖 `AudioContext`、讀取 `cicada_vn_meta_v1` 音量設定，並淡入待機中的 BGM。 |
 | `audioEngine.playBGM(trackId, fadeMs = 1000)` | 切換至指定 BGM（`title_breeze` \| `summer_day` \| `twilight_memory` \| `tension_secret` \| `climax_choice`）。若與現行曲目相同則直接忽略；若情境切換至深夜且未特別指定，自動淡出駐留蟬鳴。 |
 | `audioEngine.stopBGM(fadeMs = 800)` | 平滑淡出所有 BGM（用於「從頭開始」過場黑屏或結局靜默餘韻）。 |
-| `audioEngine.playSFX(sfxId, options?)` | 觸發劇本指定 SFX（`cicada_ambience` \| `wind_chime` \| `choice_confirm` \| `heartbeat` \| `door_slide` \| `memory_flash`）。其中 `choice_confirm` 可傳入 `{ resonance: 'none' \| 'outsideBond' \| 'dependency' \| 'truth' }` 以自動疊加「心境波動」細微泛音。 |
+| `audioEngine.playSFX(sfxId, options?)` | 觸發劇本指定 SFX（`cicada_ambience` \| `rain_ambience` \| `wind_chime` \| `choice_confirm` \| `heartbeat` \| `door_slide` \| `memory_flash`）。其中 `cicada_ambience` 與 `rain_ambience` 自動互斥淡換；`choice_confirm` 可傳入 `{ resonance: 'none' \| 'outsideBond' \| 'dependency' \| 'truth' }` 以自動疊加「心境波動」細微泛音。 |
 | `audioEngine.stopAmbience(fadeMs = 1200)` | 平滑淡出駐留中的 `cicada_ambience`。 |
 | `audioEngine.playTypeTick(speakerId, char)` | 依說話者（`kotori` \| `natsumi` \| `yuma`）與字元決定是否播放柔和打字機音效；自動執行標點略過、`52ms` 節流與 `±8%` 音高微調。 |
 | `audioEngine.playUI(uiId)` | 播放介面微音效（`advance` \| `hover` \| `save` \| `load` \| `modal_open` \| `modal_close` \| `blocked`）。 |

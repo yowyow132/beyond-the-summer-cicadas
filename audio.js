@@ -301,8 +301,9 @@
       this.pinkNoiseBuffer = null;
       this.reverbBuffer = null;
 
-      // Cicada ambience single-instance state
+      // Ambience single-instance state
       this.cicadaInstance = null;
+      this.rainInstance = null;
 
       // Throttling timestamps
       this.lastTypeTickMs = 0;
@@ -1199,6 +1200,7 @@
     // =========================================================================
     _startCicadaAmbience() {
       if (!this.settings.cicadaEnabled || !this.ctx || !this.unlocked) return;
+      if (this.rainInstance) this.stopRain(900);
       const ctx = this.ctx;
       const now = ctx.currentTime;
 
@@ -1297,10 +1299,10 @@
       };
     }
 
-    stopAmbience(fadeMs = 1200) {
-      if (!this.cicadaInstance || !this.ctx) return;
-      const inst = this.cicadaInstance;
-      this.cicadaInstance = null;
+    _stopAmbienceInstance(propName, fadeMs = 900) {
+      const inst = this[propName];
+      if (!inst || !this.ctx) return;
+      this[propName] = null;
 
       const now = this.ctx.currentTime;
       const fadeSec = Math.max(0.05, fadeMs / 1000);
@@ -1317,8 +1319,95 @@
       }, fadeMs + 80);
     }
 
+    stopCicada(fadeMs = 900) {
+      this._stopAmbienceInstance('cicadaInstance', fadeMs);
+    }
+
+    stopRain(fadeMs = 900) {
+      this._stopAmbienceInstance('rainInstance', fadeMs);
+    }
+
+    stopAmbience(fadeMs = 1200) {
+      this.stopCicada(fadeMs);
+      this.stopRain(fadeMs);
+    }
+
+    _startRainAmbience() {
+      if (!this.settings.cicadaEnabled || !this.ctx || !this.unlocked) return;
+      if (this.cicadaInstance) this.stopCicada(900);
+      const ctx = this.ctx;
+      const now = ctx.currentTime;
+
+      if (this.rainInstance) {
+        const g = this.rainInstance.masterGain;
+        g.gain.cancelScheduledValues(now);
+        g.gain.setValueAtTime(g.gain.value, now);
+        g.gain.linearRampToValueAtTime(0.082, now + 1.2);
+        return;
+      }
+
+      const rainWash = ctx.createBufferSource();
+      rainWash.buffer = this.pinkNoiseBuffer;
+      rainWash.loop = true;
+
+      const lpWash = ctx.createBiquadFilter();
+      lpWash.type = 'lowpass';
+      lpWash.frequency.value = 920;
+      lpWash.Q.value = 0.6;
+
+      const washGain = ctx.createGain();
+      washGain.gain.value = 0.85;
+
+      const rainPatter = ctx.createBufferSource();
+      rainPatter.buffer = this.pinkNoiseBuffer;
+      rainPatter.loop = true;
+
+      const bpPatter = ctx.createBiquadFilter();
+      bpPatter.type = 'bandpass';
+      bpPatter.frequency.value = 2350;
+      bpPatter.Q.value = 1.4;
+
+      const patterGain = ctx.createGain();
+      patterGain.gain.value = 0.24;
+
+      const masterGain = ctx.createGain();
+      masterGain.gain.setValueAtTime(0.0001, now);
+      masterGain.gain.linearRampToValueAtTime(0.082, now + 1.2);
+
+      const swellLfo = ctx.createOscillator();
+      swellLfo.type = 'sine';
+      swellLfo.frequency.value = 0.17;
+      const swellDepth = ctx.createGain();
+      swellDepth.gain.value = 0.016;
+      swellLfo.connect(swellDepth);
+      swellDepth.connect(masterGain.gain);
+
+      rainWash.connect(lpWash);
+      lpWash.connect(washGain);
+      washGain.connect(masterGain);
+
+      rainPatter.connect(bpPatter);
+      bpPatter.connect(patterGain);
+      patterGain.connect(masterGain);
+
+      masterGain.connect(this.masterSfxGain);
+
+      rainWash.start(now, 0.2);
+      rainPatter.start(now, 1.9);
+      swellLfo.start(now);
+
+      this.rainInstance = {
+        masterGain: masterGain,
+        nodes: [rainWash, rainPatter, swellLfo]
+      };
+    }
+
     isCicadaActive() {
       return Boolean(this.cicadaInstance);
+    }
+
+    isRainActive() {
+      return Boolean(this.rainInstance);
     }
 
     // =========================================================================
@@ -1333,6 +1422,11 @@
 
       if (sfxId === 'cicada_ambience') {
         this._startCicadaAmbience();
+        return;
+      }
+
+      if (sfxId === 'rain_ambience') {
+        this._startRainAmbience();
         return;
       }
 

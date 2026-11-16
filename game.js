@@ -97,9 +97,12 @@
     modalGallery: document.getElementById('modal-gallery'),
     galleryModalCount: document.getElementById('gallery-modal-count'),
     galleryCgCount: document.getElementById('gallery-cg-count'),
+    galleryRouteCount: document.getElementById('gallery-route-count'),
     tabGalleryEndings: document.getElementById('tab-gallery-endings'),
     tabGalleryCgs: document.getElementById('tab-gallery-cgs'),
+    tabGalleryRoutes: document.getElementById('tab-gallery-routes'),
     galleryGrid: document.getElementById('gallery-grid'),
+    galleryRoutes: document.getElementById('gallery-routes'),
     galleryDetail: document.getElementById('gallery-detail'),
     galleryDetailImg: document.getElementById('gallery-detail-img'),
     galleryDetailCode: document.getElementById('gallery-detail-code'),
@@ -155,6 +158,7 @@
     bgLayerActive: 'a',
     activeBgmId: null,
     cicadaActive: false,
+    rainActive: false,
     activeChars: [],
     slotBufferActive: { left: 'a', center: 'a', right: 'a' },
 
@@ -332,6 +336,7 @@
       activeBgFilter: state.activeBgFilter,
       activeBgm: state.activeBgmId,
       cicadaActive: state.cicadaActive || audio.isCicadaActive(),
+      rainActive: state.rainActive || audio.isRainActive(),
       activeChars: state.activeChars.map((c) => Object.assign({}, c)),
       historyLog: state.historyLog.slice(-MAX_HISTORY_LOG),
       sceneTitle: node ? node.sceneTitle : '序幕',
@@ -384,11 +389,17 @@
       audio.playBGM(record.activeBgm, 1000);
       updateVignette(record.activeBgm, record.activeBgFilter || '');
     }
-    if (record.cicadaActive) {
+    if (record.rainActive) {
+      state.cicadaActive = false;
+      state.rainActive = true;
+      audio.playSFX('rain_ambience');
+    } else if (record.cicadaActive) {
+      state.rainActive = false;
       state.cicadaActive = true;
       audio.playSFX('cicada_ambience');
     } else {
       state.cicadaActive = false;
+      state.rainActive = false;
       audio.stopAmbience(800);
     }
 
@@ -417,6 +428,12 @@
     el.galleryModalCount.textContent = countText;
     if (el.galleryCgCount && Array.isArray(VN.CG_META)) {
       el.galleryCgCount.textContent = meta.unlockedCgs.length + ' / ' + VN.CG_META.length;
+    }
+    if (el.galleryRouteCount && Array.isArray(VN.ROUTE_FLOWCHART)) {
+      const seenNodes = VN.ROUTE_FLOWCHART.filter((step) =>
+        step.branches.some((b) => meta.readNodes.includes(b.targetId))
+      ).length;
+      el.galleryRouteCount.textContent = seenNodes + ' / ' + VN.ROUTE_FLOWCHART.length;
     }
   }
 
@@ -604,6 +621,7 @@
   function switchToStage() {
     blurFocusedButton();
     state.mode = 'PLAYING';
+    el.gameRoot.classList.remove('screen-title');
     el.titleScreen.classList.remove('is-active');
     el.vnStage.classList.remove('is-ui-hidden');
     el.hideUiOverlay.classList.add('is-hidden');
@@ -672,14 +690,29 @@
       audio.playBGM(node.bgm, 1000);
       if (node.bgm === 'tension_secret' || node.bgm === 'climax_choice') {
         state.cicadaActive = false;
+        if (typeof audio.stopCicada === 'function') audio.stopCicada(900);
       }
     }
     updateVignette(state.activeBgmId, node.bgFilter || state.activeBgFilter);
 
-    // 音效
+    // 環境音與劇情音效
+    if (node.stopAmbience) {
+      state.cicadaActive = false;
+      state.rainActive = false;
+      audio.stopAmbience(900);
+    }
     if (node.sfx) {
-      if (node.sfx === 'cicada_ambience') state.cicadaActive = true;
-      audio.playSFX(node.sfx);
+      const sfxList = Array.isArray(node.sfx) ? node.sfx : [node.sfx];
+      sfxList.forEach((sfxId) => {
+        if (sfxId === 'cicada_ambience') {
+          state.cicadaActive = true;
+          state.rainActive = false;
+        } else if (sfxId === 'rain_ambience') {
+          state.rainActive = true;
+          state.cicadaActive = false;
+        }
+        audio.playSFX(sfxId);
+      });
     }
 
     // 角色立繪（事件 CG 期間自動隱藏半身立繪避免疊圖）
@@ -1131,7 +1164,7 @@
   }
 
   function openGalleryModal(tabName) {
-    if (tabName === 'endings' || tabName === 'cgs') {
+    if (tabName === 'endings' || tabName === 'cgs' || tabName === 'routes') {
       state.galleryTab = tabName;
     }
     renderGalleryTab();
@@ -1140,16 +1173,60 @@
 
   function renderGalleryTab() {
     el.galleryGrid.classList.remove('is-hidden');
+    if (el.galleryRoutes) el.galleryRoutes.classList.add('is-hidden');
     el.galleryDetail.classList.add('is-hidden');
     el.galleryGrid.innerHTML = '';
+    if (el.galleryRoutes) el.galleryRoutes.innerHTML = '';
     updateTitleGalleryBadge();
 
     if (el.tabGalleryEndings && el.tabGalleryCgs) {
       const isEndings = state.galleryTab === 'endings';
+      const isCgs = state.galleryTab === 'cgs';
+      const isRoutes = state.galleryTab === 'routes';
       el.tabGalleryEndings.classList.toggle('is-active', isEndings);
       el.tabGalleryEndings.setAttribute('aria-selected', String(isEndings));
-      el.tabGalleryCgs.classList.toggle('is-active', !isEndings);
-      el.tabGalleryCgs.setAttribute('aria-selected', String(!isEndings));
+      el.tabGalleryCgs.classList.toggle('is-active', isCgs);
+      el.tabGalleryCgs.setAttribute('aria-selected', String(isCgs));
+      if (el.tabGalleryRoutes) {
+        el.tabGalleryRoutes.classList.toggle('is-active', isRoutes);
+        el.tabGalleryRoutes.setAttribute('aria-selected', String(isRoutes));
+      }
+    }
+
+    if (state.galleryTab === 'routes' && el.galleryRoutes && Array.isArray(VN.ROUTE_FLOWCHART)) {
+      el.galleryGrid.classList.add('is-hidden');
+      el.galleryRoutes.classList.remove('is-hidden');
+      VN.ROUTE_FLOWCHART.forEach((step) => {
+        const seenCount = step.branches.filter((b) => meta.readNodes.includes(b.targetId)).length;
+        const card = document.createElement('div');
+        card.className = 'route-card' + (seenCount > 0 ? ' is-explored' : '');
+
+        const head = document.createElement('div');
+        head.className = 'route-card-head';
+        const title = document.createElement('h3');
+        title.className = 'route-card-title';
+        title.textContent = step.stepLabel;
+        const badge = document.createElement('span');
+        badge.className = 'route-card-badge';
+        badge.textContent = '已探索 ' + seenCount + ' / ' + step.branches.length;
+        head.appendChild(title);
+        head.appendChild(badge);
+
+        const branchesEl = document.createElement('div');
+        branchesEl.className = 'route-branches';
+        step.branches.forEach((branch) => {
+          const isSeen = meta.readNodes.includes(branch.targetId);
+          const chip = document.createElement('span');
+          chip.className = 'route-branch-chip' + (isSeen ? ' is-seen' : '');
+          chip.textContent = (isSeen ? '✓ ' + branch.label : '◇ ？？？（未探索分歧）');
+          branchesEl.appendChild(chip);
+        });
+
+        card.appendChild(head);
+        card.appendChild(branchesEl);
+        el.galleryRoutes.appendChild(card);
+      });
+      return;
     }
 
     if (state.galleryTab === 'cgs' && Array.isArray(VN.CG_META)) {
@@ -1343,7 +1420,11 @@
       closeAllModals(true);
       el.endingOverlay.classList.add('is-hidden');
       el.choicesLayer.classList.add('is-hidden');
+      setStageCharacters([]);
+      state.cicadaActive = false;
+      state.rainActive = false;
       state.mode = 'TITLE';
+      el.gameRoot.classList.add('screen-title');
       el.titleScreen.classList.add('is-active');
       updateTitleContinueButton();
       updateTitleGalleryBadge();
@@ -1497,6 +1578,12 @@
         state.galleryTab = 'cgs';
         renderGalleryTab();
       });
+      if (el.tabGalleryRoutes) {
+        el.tabGalleryRoutes.addEventListener('click', () => {
+          state.galleryTab = 'routes';
+          renderGalleryTab();
+        });
+      }
     }
 
     // 結局畫面按鈕
@@ -1551,7 +1638,11 @@
 
     el.setCicada.addEventListener('change', () => {
       audio.setAudioSettings({ cicadaEnabled: el.setCicada.checked });
-      if (el.setCicada.checked && state.cicadaActive) {
+      if (!el.setCicada.checked) {
+        audio.stopAmbience(400);
+      } else if (state.rainActive) {
+        audio.playSFX('rain_ambience');
+      } else if (state.cicadaActive) {
         audio.playSFX('cicada_ambience');
       }
     });

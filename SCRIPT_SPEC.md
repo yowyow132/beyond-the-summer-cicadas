@@ -63,7 +63,7 @@
 ### 2.4 音訊曲目與音效（`[BGM: track_id]` / `[SFX: sfx_id]`）— 全數沿用 `AUDIO_SPEC.md`
 
 - **BGM**：`title_breeze`、`summer_day`、`twilight_memory`、`tension_secret`、`climax_choice`
-- **SFX**：`cicada_ambience`、`wind_chime`、`choice_confirm`、`heartbeat`、`door_slide`、`memory_flash`
+- **SFX**：`cicada_ambience`、`rain_ambience`（暴雨夜／驟雨環境音層）、`wind_chime`、`choice_confirm`、`heartbeat`、`door_slide`、`memory_flash`
 
 ---
 
